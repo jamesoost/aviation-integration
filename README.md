@@ -9,14 +9,35 @@ A compact ETL project that runs the same flight-data workflow with two engines:
 - pandas
 - PySpark
 
-Both engines share one schema contract and one validation rule set, so behavior remains consistent when both run on the same raw payload.
+Both engines follow the same schema contract and validation rules, so behavior remains consistent when both run on the same raw payload.
 
 ## Purpose and Features of This Repo
 
-- Personal skill development of pandas and Spark implementations side by side
-- Uses shared validation logic to enforce parity
+- Develop hands-on pandas and PySpark experience through equivalent ETL implementations
+- Uses shared validation rules to enforce parity
 - Applies a quarantine pattern for invalid records
 - Persists valid records to CSV and SQLite
+
+## Architecture
+
+```mermaid
+flowchart TD
+	A[aviationstack API] --> B[Raw JSON]
+	B --> C[Schema Normalization]
+	C --> D[Pandas or PySpark Transform]
+	D --> E[Validation Rules]
+	E -->|Valid| F[Staging CSV]
+	F --> G[SQLite]
+	E -->|Invalid| H[Quarantine CSV]
+```
+
+## Outcomes
+
+- Built one ETL flow that runs with both pandas and PySpark while keeping a shared validation contract.
+- Verified positive and negative transformation cases with deterministic sample records in tests.
+- Confirmed parity between engines on valid/invalid counts and validation error labels.
+- Added stage-level CLI execution (`extract`, `transform`, `load`) for demo-friendly step-by-step runs.
+- Added CI automation for linting and transformation tests on every push and pull request.
 
 ## Quickstart
 
@@ -121,7 +142,7 @@ python main.py --step load --input-valid-csv data/staging/flights_processed_YYYY
 - SQLite database: `data/processed/aviation.db`
 - Log files: `data/logs`
 
-Each run returns:
+Full pipeline run returns:
 - `engine`
 - `valid_rows`
 - `invalid_rows`
@@ -146,14 +167,6 @@ Current coverage includes:
 - pandas invalid-row handling
 - pandas vs spark parity on shared input
 
-## Outcomes
-
-- Built one ETL flow that runs with both pandas and PySpark while keeping a shared validation contract.
-- Verified positive and negative transformation cases with deterministic sample records in tests.
-- Confirmed parity between engines on valid/invalid counts and validation error labels.
-- Added stage-level CLI execution (`extract`, `transform`, `load`) for demo-friendly step-by-step runs.
-- Added CI automation for linting and transformation tests on every push and pull request.
-
 ## Project Layout
 
 - `main.py`: CLI entrypoint
@@ -165,9 +178,3 @@ Current coverage includes:
 - `src/pandas_pipeline/`: pandas transform and load
 - `src/pyspark_pipeline/`: spark transform
 - `tests/`: validation and parity tests
-
-## Notes
-
-- Live API data changes between runs. Compare engines against the same raw file for apples-to-apples parity checks.
-- Spark execution preflight checks for Java, `JAVA_HOME`, and PySpark installation.
-- See [LICENSE](LICENSE) for usage terms.
