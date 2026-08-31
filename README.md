@@ -3,6 +3,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)
 ![Engines](https://img.shields.io/badge/Engines-pandas%20%7C%20pyspark-orange.svg)
+[![CI](https://github.com/jamesoost/aviation-integration/actions/workflows/ci.yml/badge.svg)](https://github.com/jamesoost/aviation-integration/actions/workflows/ci.yml)
 
 A compact ETL project that runs the same flight-data workflow with two engines:
 - pandas
